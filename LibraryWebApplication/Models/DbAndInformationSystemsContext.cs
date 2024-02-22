@@ -140,7 +140,7 @@ public partial class DbAndInformationSystemsContext : DbContext
                 .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("ID");
-            entity.Property(e => e.Genre1)
+            entity.Property(e => e.Genre_)
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .IsFixedLength()

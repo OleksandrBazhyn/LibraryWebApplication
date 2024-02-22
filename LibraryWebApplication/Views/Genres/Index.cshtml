@@ -1,19 +1,19 @@
 ﻿@model IEnumerable<LibraryWebApplication.Models.Genre>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Книги за жанром";
 }
 
-<h1>Index</h1>
+<h1>Книги за жанром @ViewBag.GenreName</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-route-id="@ViewBag.GenreId">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Genre1)
+                @Html.DisplayNameFor(model => model.Genre_)
             </th>
             <th></th>
         </tr>
@@ -22,7 +22,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Genre1)
+                @Html.DisplayFor(modelItem => item.Genre_)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

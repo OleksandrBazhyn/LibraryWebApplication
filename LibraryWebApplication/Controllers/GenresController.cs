@@ -41,7 +41,7 @@ namespace LibraryWebApplication.Controllers
                 return NotFound();
             }
 
-            return View(genre);
+            return RedirectToAction("Index", "Books", new { id = genre.Id, name = genre.Genre_ });
         }
 
         // GET: Genres/Create

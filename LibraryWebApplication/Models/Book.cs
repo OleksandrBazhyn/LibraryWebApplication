@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryWebApplication.Models;
 
 public partial class Book
 {
+    [Key]
     public string Id { get; set; } = null!;
 
     public string? Isbn { get; set; }
