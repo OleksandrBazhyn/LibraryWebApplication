@@ -1,0 +1,179 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using LibraryWebApplication.Models;
+
+namespace LibraryWebApplication.Controllers
+{
+    public class BooksIssuesController : Controller
+    {
+        private readonly DbAndInformationSystemsContext _context;
+
+        public BooksIssuesController(DbAndInformationSystemsContext context)
+        {
+            _context = context;
+        }
+
+        // GET: BooksIssues
+        public async Task<IActionResult> Index()
+        {
+            var dbAndInformationSystemsContext = _context.BooksIssues.Include(b => b.Books).Include(b => b.BorrowerLibrary).Include(b => b.Reader);
+            return View(await dbAndInformationSystemsContext.ToListAsync());
+        }
+
+        // GET: BooksIssues/Details/5
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null || _context.BooksIssues == null)
+            {
+                return NotFound();
+            }
+
+            var booksIssue = await _context.BooksIssues
+                .Include(b => b.Books)
+                .Include(b => b.BorrowerLibrary)
+                .Include(b => b.Reader)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (booksIssue == null)
+            {
+                return NotFound();
+            }
+
+            return View(booksIssue);
+        }
+
+        // GET: BooksIssues/Create
+        public IActionResult Create()
+        {
+            ViewData["BooksId"] = new SelectList(_context.Books, "Id", "Id");
+            ViewData["BorrowerLibraryId"] = new SelectList(_context.Libraries, "Id", "Id");
+            ViewData["ReaderId"] = new SelectList(_context.Readers, "Id", "Id");
+            return View();
+        }
+
+        // POST: BooksIssues/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,BorrowerLibraryId,ReaderId,BooksId,IssuedDate,HomeTaken")] BooksIssue booksIssue)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(booksIssue);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["BooksId"] = new SelectList(_context.Books, "Id", "Id", booksIssue.BooksId);
+            ViewData["BorrowerLibraryId"] = new SelectList(_context.Libraries, "Id", "Id", booksIssue.BorrowerLibraryId);
+            ViewData["ReaderId"] = new SelectList(_context.Readers, "Id", "Id", booksIssue.ReaderId);
+            return View(booksIssue);
+        }
+
+        // GET: BooksIssues/Edit/5
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null || _context.BooksIssues == null)
+            {
+                return NotFound();
+            }
+
+            var booksIssue = await _context.BooksIssues.FindAsync(id);
+            if (booksIssue == null)
+            {
+                return NotFound();
+            }
+            ViewData["BooksId"] = new SelectList(_context.Books, "Id", "Id", booksIssue.BooksId);
+            ViewData["BorrowerLibraryId"] = new SelectList(_context.Libraries, "Id", "Id", booksIssue.BorrowerLibraryId);
+            ViewData["ReaderId"] = new SelectList(_context.Readers, "Id", "Id", booksIssue.ReaderId);
+            return View(booksIssue);
+        }
+
+        // POST: BooksIssues/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("Id,BorrowerLibraryId,ReaderId,BooksId,IssuedDate,HomeTaken")] BooksIssue booksIssue)
+        {
+            if (id != booksIssue.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(booksIssue);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BooksIssueExists(booksIssue.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["BooksId"] = new SelectList(_context.Books, "Id", "Id", booksIssue.BooksId);
+            ViewData["BorrowerLibraryId"] = new SelectList(_context.Libraries, "Id", "Id", booksIssue.BorrowerLibraryId);
+            ViewData["ReaderId"] = new SelectList(_context.Readers, "Id", "Id", booksIssue.ReaderId);
+            return View(booksIssue);
+        }
+
+        // GET: BooksIssues/Delete/5
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null || _context.BooksIssues == null)
+            {
+                return NotFound();
+            }
+
+            var booksIssue = await _context.BooksIssues
+                .Include(b => b.Books)
+                .Include(b => b.BorrowerLibrary)
+                .Include(b => b.Reader)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (booksIssue == null)
+            {
+                return NotFound();
+            }
+
+            return View(booksIssue);
+        }
+
+        // POST: BooksIssues/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            if (_context.BooksIssues == null)
+            {
+                return Problem("Entity set 'DbAndInformationSystemsContext.BooksIssues'  is null.");
+            }
+            var booksIssue = await _context.BooksIssues.FindAsync(id);
+            if (booksIssue != null)
+            {
+                _context.BooksIssues.Remove(booksIssue);
+            }
+            
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool BooksIssueExists(string id)
+        {
+          return (_context.BooksIssues?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+    }
+}
