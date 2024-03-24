@@ -8,6 +8,7 @@ public partial class Library
 {
     [Key]
     [Display(Name = "#")]
+    [Required(ErrorMessage = "Поле не повино бути порожнім")]
     public string Id { get; set; } = null!;
 
     [Display(Name = "Адреса")]

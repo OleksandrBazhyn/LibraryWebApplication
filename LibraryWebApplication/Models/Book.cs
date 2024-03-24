@@ -8,12 +8,14 @@ public partial class Book
 {
     [Key]
     [Display(Name = "#")]
+    [Required(ErrorMessage = "Поле не повино бути порожнім")]
     public string Id { get; set; } = null!;
 
     [Display(Name = "ISBN")]
     public string? Isbn { get; set; }
 
     [Display(Name = "Назва")]
+    [Required(ErrorMessage = "Поле не повино бути порожнім")]
     public string? Name { get; set; }
 
     [Display(Name = "Автор")]

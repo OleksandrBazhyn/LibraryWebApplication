@@ -8,10 +8,11 @@ public partial class Genre
 {
     [Key]
     [Display(Name = "#")]
+    [Required(ErrorMessage = "Поле не повино бути порожнім")]
     public string Id { get; set; } = null!;
 
-    [Required(ErrorMessage ="Поле не повинно бути порожнім.")]
     [Display(Name="Жанр")]
+    [Required(ErrorMessage = "Поле не повино бути порожнім")]
     public string? Genre_ { get; set; }
 
     public virtual ICollection<Book> Books { get; } = new List<Book>();
