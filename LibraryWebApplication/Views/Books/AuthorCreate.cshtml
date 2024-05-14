@@ -1,10 +1,10 @@
 ﻿@model LibraryWebApplication.Models.Book
 
 @{
-    ViewData["Title"] = "Створити книгу за жанром";
+    ViewData["Title"] = "Створити книгу за авторством";
 }
 
-<h1>Додавання книг за жанром @ViewBag.GenreName</h1>
+<h1>Додавання книги за авторством @ViewBag.AuthorLastName @ViewBag.AuthorFirstName</h1>
 
 <h4>Book</h4>
 <hr />
@@ -28,10 +28,10 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Author" class="control-label"></label>
-                <select asp-for="Author" class ="form-control" asp-items="ViewBag.Author"></select>
+                <label asp-for="Genre" class="control-label"></label>
+                <select asp-for="Genre" class ="form-control" asp-items="ViewBag.Genre"></select>
             </div>
-                <input type="hidden" value="@ViewBag.GenreId" name="GenreId" />
+            <input type="hidden" value="@ViewBag.AuthorId" name="AuthorId" />
             <div class="form-group">
                 <label asp-for="PublicationYear" class="control-label"></label>
                 <input asp-for="PublicationYear" class="form-control" />

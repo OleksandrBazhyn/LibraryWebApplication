@@ -42,7 +42,7 @@ namespace LibraryWebApplication.Controllers
             }
 
             //return View(author);
-            return RedirectToAction("Index", "Books", new { id = author.Id, lastName = author.LastName, firstName = author.FirstName });
+            return RedirectToAction("AuthorIndex", "Books", new { id = author.Id, lastName = author.LastName, firstName = author.FirstName });
         }
 
         // GET: Authors/Create

@@ -23,8 +23,8 @@ namespace LibraryWebApplication.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return _context.Languages != null ?
-                        View(await _context.Languages.ToListAsync()) :
+            return _context.Books != null ?
+                        View(await _context.Books.ToListAsync()) :
                         Problem("Entity set 'DbAndInformationSystemsContext.Books'  is null.");
         }
 
@@ -40,6 +40,18 @@ namespace LibraryWebApplication.Controllers
             return View(await bookByGenre.ToListAsync());
         }
 
+        public async Task<IActionResult> AuthorIndex(int? id, string? lastname, string? firstname)
+        {
+            if (id == null) return RedirectToAction("Authors", "Index");
+            // Found the books by author
+            ViewBag.AuthorId = id;
+            ViewBag.AuthorLastName = lastname;
+            ViewBag.AuthorFirstName = firstname;
+            var bookByAuthor = _context.Books.Where(b => b.Author == id.ToString());
+
+            return View(await bookByAuthor.ToListAsync());
+        }
+
         // GET: Books/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -49,26 +61,6 @@ namespace LibraryWebApplication.Controllers
             }
 
             var book = await _context.Books
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-
-            return View(book);
-        }
-
-        public async Task<IActionResult> GenreDetails(string id)
-        {
-            if (id == null || _context.Books == null)
-            {
-                return NotFound();
-            }
-
-            var book = await _context.Books
-                .Include(b => b.AuthorNavigation)
-                .Include(b => b.GenreNavigation)
-                .Include(b => b.LanguageNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -92,6 +84,15 @@ namespace LibraryWebApplication.Controllers
             // ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Genre_");
             ViewBag.GenreId = genreId;
             ViewBag.GenreName = _context.Genres.Where(c => c.Id == genreId.ToString()).FirstOrDefault().Genre_;
+            return View();
+        }
+
+        public IActionResult AuthorCreate(int authorId, string? lastname, string? firstname)
+        {
+            ViewBag.AuthorId = authorId;
+            ViewBag.AuthorFirstName = firstname;
+            ViewBag.AuthorLastName = lastname;
+            ViewBag.AuthorName = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault();
             return View();
         }
 
