@@ -7,7 +7,7 @@
 <h1>Книги за жанром @ViewBag.GenreName</h1>
 
 <p>
-    @Html.ActionLink("Додайте нову книгу", "GenreCreate", new {genreId = ViewBag.GenreId})
+    @Html.ActionLink("Додайте нову книгу", "GenreCreate", new { Genre = ViewBag.GenreId })
 </p>
 <table class="table">
     <thead>

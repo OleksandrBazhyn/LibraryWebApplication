@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibraryWebApplication.Models;
+using Humanizer.Localisation;
 
 namespace LibraryWebApplication.Controllers
 {
@@ -41,7 +42,7 @@ namespace LibraryWebApplication.Controllers
                 return NotFound();
             }
 
-            return View(language);
+            return RedirectToAction("LanguageIndex", "Books", new { id = language.Id, name = language.Language1 });
         }
 
         // GET: Languages/Create

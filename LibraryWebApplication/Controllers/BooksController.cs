@@ -52,6 +52,17 @@ namespace LibraryWebApplication.Controllers
             return View(await bookByAuthor.ToListAsync());
         }
 
+        public async Task<IActionResult> LanguageIndex(int? id, string? name)
+        {
+            if (id == null) return RedirectToAction("Languages", "Index");
+            // Found the books by language
+            ViewBag.LanguageId = id;
+            ViewBag.LanguageName = name;
+            var bookByLanguage = _context.Books.Where(b => b.Language == id.ToString());
+
+            return View(await bookByLanguage.ToListAsync());
+        }
+
         // GET: Books/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -96,9 +107,29 @@ namespace LibraryWebApplication.Controllers
             return View();
         }
 
+        public IActionResult LanguageCreate(int languageId)
+        {
+            ViewBag.LanguageId = languageId;
+            ViewBag.LanguageName = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault();
+            return View();
+        }
+
         // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Isbn,Name,Genre,PublicationYear,Language")] Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(book);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(book);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GenreCreate(int genreId, [Bind("Id,Isbn,Name,Author,PublicationYear,Language")] Book book)
@@ -109,23 +140,43 @@ namespace LibraryWebApplication.Controllers
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 // return RedirectToAction(nameof(Index));
-                return RedirectToAction("Index", "Books", new {id = genreId, name = _context.Genres.Where(c => c.Id == genreId.ToString()).FirstOrDefault().Genre_});
+                return RedirectToAction("GenreIndex", "Books", new {id = genreId, name = _context.Genres.Where(c => c.Id == genreId.ToString()).FirstOrDefault().Genre_});
             }
             // ViewBag["genreId"] = new SelectList(_context.Genres, "Id", "Name", );
             // return View(book);
-            return RedirectToAction("Index", "Books", new {id = genreId, name = _context.Genres.Where(c => c.Id == genreId.ToString()).FirstOrDefault().Genre_});
+            return RedirectToAction("GenreIndex", "Books", new {id = genreId, name = _context.Genres.Where(c => c.Id == genreId.ToString()).FirstOrDefault().Genre_});
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AuthorCreate(int authorId, [Bind("Id,Isbn,Name,Genre,PublicationYear,Language")] Book book)
+        {
+            book.Author = authorId.ToString();
+            if (ModelState.IsValid)
+            {
+                _context.Add(book);
+                await _context.SaveChangesAsync();
 
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(book);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["Author"] = new SelectList(_context.Authors, "Id", "Id", book.Author);
-            //ViewData["Genre"] = new SelectList(_context.Genres, "Id", "Id", book.Genre);
-            //ViewData["Language"] = new SelectList(_context.Languages, "Id", "Id", book.Language);
-            //return View(book);
+                return RedirectToAction("AuthorIndex", "Books", new { id = authorId, name = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault() });
+            }
+
+            return RedirectToAction("AuthorIndex", "Books", new { id = authorId, name = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault() });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LanguageCreate(int languageId, [Bind("Id,Isbn,Name,Genre,PublicationYear,Author")] Book book)
+        {
+            book.Language = languageId.ToString();
+            if (ModelState.IsValid)
+            {
+                _context.Add(book);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("LanguageIndex", "Books", new { id = languageId, name = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault() });
+            }
+
+            return RedirectToAction("LanguageIndex", "Books", new { id = languageId, name = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault() });
         }
 
         // GET: Books/Edit/5
