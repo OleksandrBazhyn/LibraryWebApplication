@@ -27,7 +27,7 @@ namespace LibraryWebApplication.Controllers
         }
 
         // GET: Authors/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null || _context.Authors == null)
             {
@@ -41,7 +41,8 @@ namespace LibraryWebApplication.Controllers
                 return NotFound();
             }
 
-            return View(author);
+            //return View(author);
+            return RedirectToAction("Index", "Books", new { id = author.Id, lastName = author.LastName, firstName = author.FirstName });
         }
 
         // GET: Authors/Create

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<LibraryWebApplication.Models.Book>
 
 @{
-    ViewData["Title"] = "Книги";
+    ViewData["Title"] = "Книги за жанром";
 }
 
-<h1>Книги</h1>
+<h1>Книги за жанром @ViewBag.GenreName</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @Html.ActionLink("Додайте нову книгу", "Create", new {genreId = ViewBag.GenreId})
 </p>
 <table class="table">
     <thead>

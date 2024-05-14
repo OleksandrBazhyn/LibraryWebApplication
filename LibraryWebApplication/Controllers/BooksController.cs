@@ -20,7 +20,15 @@ namespace LibraryWebApplication.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index(int? id, string? name)
+
+        public async Task<IActionResult> Index()
+        {
+            return _context.Languages != null ?
+                        View(await _context.Languages.ToListAsync()) :
+                        Problem("Entity set 'DbAndInformationSystemsContext.Books'  is null.");
+        }
+
+        public async Task<IActionResult> GenreIndex(int? id, string? name)
         {
             if (id == null) return RedirectToAction("Genres", "Index");
             // Found the books by genre
@@ -28,13 +36,29 @@ namespace LibraryWebApplication.Controllers
             ViewBag.GenreName = name;
             // var bookByGenre = _context.Books.Where(b => b.Id == id.ToString()).Include(b => b.Genre);
             var bookByGenre = _context.Books.Where(b => b.Genre == id.ToString());
-            Console.WriteLine(bookByGenre);
             
             return View(await bookByGenre.ToListAsync());
         }
 
         // GET: Books/Details/5
         public async Task<IActionResult> Details(string id)
+        {
+            if (id == null || _context.Books == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Books
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return View(book);
+        }
+
+        public async Task<IActionResult> GenreDetails(string id)
         {
             if (id == null || _context.Books == null)
             {
@@ -55,14 +79,15 @@ namespace LibraryWebApplication.Controllers
         }
 
         // GET: Books/Create
-        /*public IActionResult Create()
+        public IActionResult Create()
         {
             ViewData["Author"] = new SelectList(_context.Authors, "Id", "Id");
             ViewData["Genre"] = new SelectList(_context.Genres, "Id", "Id");
             ViewData["Language"] = new SelectList(_context.Languages, "Id", "Id");
             return View();
-        }*/
-        public IActionResult Create(int genreId)
+        }
+
+        public IActionResult GenreCreate(int genreId)
         {
             // ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Genre_");
             ViewBag.GenreId = genreId;
@@ -75,7 +100,7 @@ namespace LibraryWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int genreId, [Bind("Id,Isbn,Name,Author,PublicationYear,Language")] Book book)
+        public async Task<IActionResult> GenreCreate(int genreId, [Bind("Id,Isbn,Name,Author,PublicationYear,Language")] Book book)
         {
             book.Genre = genreId.ToString();
             if(ModelState.IsValid)

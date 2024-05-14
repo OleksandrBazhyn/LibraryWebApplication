@@ -27,7 +27,7 @@ namespace LibraryWebApplication.Controllers
         }
 
         // GET: Genres/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null || _context.Genres == null)
             {
@@ -41,7 +41,7 @@ namespace LibraryWebApplication.Controllers
                 return NotFound();
             }
 
-            return RedirectToAction("Index", "Books", new { id = genre.Id, name = genre.Genre_ });
+            return RedirectToAction("GenreIndex", "Books", new { id = genre.Id, genre = genre.Genre_ });
         }
 
         // GET: Genres/Create
