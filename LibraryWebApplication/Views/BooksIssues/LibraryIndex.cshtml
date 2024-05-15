@@ -1,0 +1,59 @@
+﻿@model IEnumerable<LibraryWebApplication.Models.BooksIssue>
+
+@{
+    ViewData["Title"] = "Історія позик в бібліотеці";
+}
+
+<h1>Історія позик в бібліотеці за адресою @ViewBag.LibraryAddress</h1>
+
+<p>
+    @Html.ActionLink("Додати нову позику", "LibraryCreate", new { BorrowerLibraryId = ViewBag.LibraryId })
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IssuedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HomeTaken)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BorrowerLibrary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reader)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IssuedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HomeTaken)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Books.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BorrowerLibrary.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reader.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

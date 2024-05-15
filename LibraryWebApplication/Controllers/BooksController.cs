@@ -102,16 +102,17 @@ namespace LibraryWebApplication.Controllers
         public IActionResult AuthorCreate(int authorId, string? lastname, string? firstname)
         {
             ViewBag.AuthorId = authorId;
-            ViewBag.AuthorFirstName = firstname;
-            ViewBag.AuthorLastName = lastname;
-            ViewBag.AuthorName = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault();
+            // ViewBag.AuthorLastName = lastname;
+            // ViewBag.AuthorFirstName = firstname;
+            ViewBag.AuthorLastName = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().LastName;
+            ViewBag.AuthorFirstName = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().FirstName;
             return View();
         }
 
         public IActionResult LanguageCreate(int languageId)
         {
             ViewBag.LanguageId = languageId;
-            ViewBag.LanguageName = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault();
+            ViewBag.LanguageName = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault().Language1;
             return View();
         }
 
@@ -158,10 +159,10 @@ namespace LibraryWebApplication.Controllers
                 _context.Add(book);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("AuthorIndex", "Books", new { id = authorId, name = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault() });
+                return RedirectToAction("AuthorIndex", "Books", new { id = authorId, lastname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().LastName, firstname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().FirstName });
             }
 
-            return RedirectToAction("AuthorIndex", "Books", new { id = authorId, name = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault() });
+            return RedirectToAction("AuthorIndex", "Books", new { id = authorId, lastname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().LastName, firstname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().FirstName });
         }
 
         [HttpPost]
@@ -174,10 +175,10 @@ namespace LibraryWebApplication.Controllers
                 _context.Add(book);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("LanguageIndex", "Books", new { id = languageId, name = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault() });
+                return RedirectToAction("LanguageIndex", "Books", new { id = languageId, name = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault().Language1 });
             }
 
-            return RedirectToAction("LanguageIndex", "Books", new { id = languageId, name = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault() });
+            return RedirectToAction("LanguageIndex", "Books", new { id = languageId, name = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault().Language1 });
         }
 
         // GET: Books/Edit/5

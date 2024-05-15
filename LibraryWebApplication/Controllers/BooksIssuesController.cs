@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibraryWebApplication.Models;
+using System.Net;
 
 namespace LibraryWebApplication.Controllers
 {
@@ -34,6 +35,16 @@ namespace LibraryWebApplication.Controllers
             var booksIssuesByBook = _context.BooksIssues.Where(b => b.BooksId == bookId.ToString());
 
             return View(await booksIssuesByBook.ToListAsync());
+        }
+        public async Task<IActionResult> LibraryIndex(int? libraryId, string? libraryAddress)
+        {
+            if (libraryId == null) return RedirectToAction("Index", "Libraries");
+            // Found the books issues by library
+            ViewBag.LibraryId = libraryId;
+            ViewBag.LibraryAddress = libraryAddress;
+            var booksIssuesByLibrary = _context.BooksIssues.Where(b => b.BorrowerLibraryId == libraryId.ToString());
+
+            return View(await booksIssuesByLibrary.ToListAsync());
         }
 
         // GET: BooksIssues/Details/5
@@ -73,6 +84,13 @@ namespace LibraryWebApplication.Controllers
             return View();
         }
 
+        public IActionResult LibraryCreate(int libraryId)
+        {
+            ViewBag.LibraryId = libraryId;
+            ViewBag.LibraryAddress = _context.Libraries.Where(c => c.Id == libraryId.ToString()).FirstOrDefault().Address;
+            return View();
+        }
+
         // POST: BooksIssues/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -107,6 +125,22 @@ namespace LibraryWebApplication.Controllers
             // ViewBag["genreId"] = new SelectList(_context.Genres, "Id", "Name", );
             // return View(book);
             return RedirectToAction("BookIndex", "BooksIssues", new { id = bookId, name = _context.Books.Where(c => c.Id == bookId.ToString()).FirstOrDefault().Name });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LibraryCreate(int libraryId, [Bind("Id,BooksId,ReaderId,IssuedDate,HomeTaken")] BooksIssue booksIssue)
+        {
+            booksIssue.BorrowerLibraryId = libraryId.ToString();
+            if (ModelState.IsValid)
+            {
+                _context.Add(booksIssue);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("LibraryIndex", "BooksIssues", new { id = libraryId, address = _context.Libraries.Where(c => c.Id == libraryId.ToString()).FirstOrDefault().Address });
+            }
+
+            return RedirectToAction("LibraryIndex", "BooksIssues", new { id = libraryId, address = _context.Libraries.Where(c => c.Id == libraryId.ToString()).FirstOrDefault().Address });
         }
 
         // GET: BooksIssues/Edit/5
