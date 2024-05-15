@@ -25,6 +25,17 @@ namespace LibraryWebApplication.Controllers
             return View(await dbAndInformationSystemsContext.ToListAsync());
         }
 
+        public async Task<IActionResult> BookIndex(int? bookId, string? bookName)
+        {
+            if (bookId == null) return RedirectToAction("Index", "Books");
+            // Found the books issues by book
+            ViewBag.BookId = bookId;
+            ViewBag.BookName = bookName;
+            var booksIssuesByBook = _context.BooksIssues.Where(b => b.BooksId == bookId.ToString());
+
+            return View(await booksIssuesByBook.ToListAsync());
+        }
+
         // GET: BooksIssues/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -55,6 +66,13 @@ namespace LibraryWebApplication.Controllers
             return View();
         }
 
+        public IActionResult BookCreate(int bookId)
+        {
+            ViewBag.BookId = bookId;
+            ViewBag.BookName = _context.Books.Where(c => c.Id == bookId.ToString()).FirstOrDefault();
+            return View();
+        }
+
         // POST: BooksIssues/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -72,6 +90,23 @@ namespace LibraryWebApplication.Controllers
             ViewData["BorrowerLibraryId"] = new SelectList(_context.Libraries, "Id", "Id", booksIssue.BorrowerLibraryId);
             ViewData["ReaderId"] = new SelectList(_context.Readers, "Id", "Id", booksIssue.ReaderId);
             return View(booksIssue);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BookCreate(int bookId, [Bind("Id,BorrowerLibraryId,ReaderId,IssuedDate,HomeTaken")] BooksIssue booksIssue)
+        {
+            booksIssue.BooksId = bookId.ToString();
+            if (ModelState.IsValid)
+            {
+                _context.Add(booksIssue);
+                await _context.SaveChangesAsync();
+                // return RedirectToAction(nameof(Index));
+                return RedirectToAction("BookIndex", "BooksIssues", new { id = bookId, name = _context.Books.Where(c => c.Id == bookId.ToString()).FirstOrDefault().Name });
+            }
+            // ViewBag["genreId"] = new SelectList(_context.Genres, "Id", "Name", );
+            // return View(book);
+            return RedirectToAction("BookIndex", "BooksIssues", new { id = bookId, name = _context.Books.Where(c => c.Id == bookId.ToString()).FirstOrDefault().Name });
         }
 
         // GET: BooksIssues/Edit/5
