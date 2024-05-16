@@ -41,7 +41,7 @@ namespace LibraryWebApplication.Controllers
                 return NotFound();
             }
 
-            return View(reader);
+            return RedirectToAction("ReaderIndex", "BooksIssues", new { id = reader.Id, lastname = reader.LastName, firstname = reader.FirstName });
         }
 
         // GET: Readers/Create

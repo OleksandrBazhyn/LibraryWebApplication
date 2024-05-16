@@ -29,7 +29,7 @@ namespace LibraryWebApplication.Controllers
         public async Task<IActionResult> BookIndex(int? bookId, string? bookName)
         {
             if (bookId == null) return RedirectToAction("Index", "Books");
-            // Found the books issues by book
+            // Found the books issues by the book
             ViewBag.BookId = bookId;
             ViewBag.BookName = bookName;
             var booksIssuesByBook = _context.BooksIssues.Where(b => b.BooksId == bookId.ToString());
@@ -39,12 +39,24 @@ namespace LibraryWebApplication.Controllers
         public async Task<IActionResult> LibraryIndex(int? libraryId, string? libraryAddress)
         {
             if (libraryId == null) return RedirectToAction("Index", "Libraries");
-            // Found the books issues by library
+            // Found the books issues by the library
             ViewBag.LibraryId = libraryId;
             ViewBag.LibraryAddress = libraryAddress;
             var booksIssuesByLibrary = _context.BooksIssues.Where(b => b.BorrowerLibraryId == libraryId.ToString());
 
             return View(await booksIssuesByLibrary.ToListAsync());
+        }
+
+        public async Task<IActionResult> ReaderIndex(int? readerId, string? lastname, string? firstname)
+        {
+            if (readerId == null) return RedirectToAction("Index", "Readers");
+            // Found the books issues by the reader
+            ViewBag.ReaderId = readerId;
+            ViewBag.ReaderLastName = lastname;
+            ViewBag.ReaderFirstName = firstname;
+            var booksIssuesByReader = _context.BooksIssues.Where(b => b.ReaderId == readerId.ToString());
+
+            return View(await booksIssuesByReader.ToListAsync());
         }
 
         // GET: BooksIssues/Details/5
@@ -88,6 +100,14 @@ namespace LibraryWebApplication.Controllers
         {
             ViewBag.LibraryId = libraryId;
             ViewBag.LibraryAddress = _context.Libraries.Where(c => c.Id == libraryId.ToString()).FirstOrDefault().Address;
+            return View();
+        }
+
+        public IActionResult ReaderCreate(int readerId)
+        {
+            ViewBag.ReaderId = readerId;
+            ViewBag.ReaderLastName = _context.Readers.Where(c => c.Id == readerId.ToString()).FirstOrDefault().FirstName;
+            ViewBag.ReaderFirstName = _context.Readers.Where(c => c.Id == readerId.ToString()).FirstOrDefault().LastName;
             return View();
         }
 
@@ -141,6 +161,22 @@ namespace LibraryWebApplication.Controllers
             }
 
             return RedirectToAction("LibraryIndex", "BooksIssues", new { id = libraryId, address = _context.Libraries.Where(c => c.Id == libraryId.ToString()).FirstOrDefault().Address });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReaderCreate(int readerId, [Bind("Id,BooksId,BorrowerLibraryId,IssuedDate,HomeTaken")] BooksIssue booksIssue)
+        {
+            booksIssue.ReaderId = readerId.ToString();
+            if (ModelState.IsValid)
+            {
+                _context.Add(booksIssue);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("ReaderIndex", "BooksIssues", new { id = readerId, lastname = _context.Readers.Where(c => c.Id == readerId.ToString()).FirstOrDefault().LastName, firstname = _context.Readers.Where(c => c.Id == readerId.ToString()).FirstOrDefault().FirstName });
+            }
+
+            return RedirectToAction("ReaderIndex", "BooksIssues", new { id = readerId, lastname = _context.Readers.Where(c => c.Id == readerId.ToString()).FirstOrDefault().LastName, firstname = _context.Readers.Where(c => c.Id == readerId.ToString()).FirstOrDefault().FirstName });
         }
 
         // GET: BooksIssues/Edit/5
