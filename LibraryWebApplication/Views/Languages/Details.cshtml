@@ -1,15 +1,20 @@
 ﻿@model LibraryWebApplication.Models.Language
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детальніше про мову";
 }
 
-<h1>Details</h1>
+<h1>Детальніше про мову</h1>
 
 <div>
-    <h4>Language</h4>
     <hr />
     <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Language1)
         </dt>
@@ -19,6 +24,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Редагувати</a> |
+    <a asp-action="Index">Назад</a>
 </div>

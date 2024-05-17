@@ -41,7 +41,7 @@ namespace LibraryWebApplication.Controllers
                 return NotFound();
             }
 
-            return RedirectToAction("LibraryIndex", "BooksIssues", new { id = library.Id, libraryAddress = library.Address });
+            return RedirectToAction("LibraryIndex", "BooksIssues", new { id = int.Parse(library.Id), libraryAddress = library.Address });
         }
 
         // GET: Libraries/Create

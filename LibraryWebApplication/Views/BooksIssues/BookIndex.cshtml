@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.IssuedDate)
             </th>
             <th>
@@ -34,24 +37,33 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.IssuedDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.HomeTaken)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Books.Id)
+                @Html.DisplayFor(modelItem => item.Books.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BorrowerLibrary.Id)
+                @Html.DisplayFor(modelItem => item.Books.Author)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Reader.Id)
+                @Html.DisplayFor(modelItem => item.BorrowerLibrary.Address)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.Reader.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reader.FirstName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Детальніше</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
             </td>
         </tr>
 }

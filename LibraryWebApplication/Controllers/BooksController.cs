@@ -102,8 +102,6 @@ namespace LibraryWebApplication.Controllers
         public IActionResult AuthorCreate(int authorId, string? lastname, string? firstname)
         {
             ViewBag.AuthorId = authorId;
-            // ViewBag.AuthorLastName = lastname;
-            // ViewBag.AuthorFirstName = firstname;
             ViewBag.AuthorLastName = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().LastName;
             ViewBag.AuthorFirstName = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().FirstName;
             return View();

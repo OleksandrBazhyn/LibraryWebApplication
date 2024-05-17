@@ -1,15 +1,17 @@
 ﻿@model LibraryWebApplication.Models.BooksIssue
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детальніше про позику";
 }
 
-<h1>Details</h1>
+<h1>Детальніше про позику</h1>
 
 <div>
-    <h4>BooksIssue</h4>
     <hr />
     <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IssuedDate)
         </dt>
@@ -26,23 +28,26 @@
             @Html.DisplayNameFor(model => model.Books)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Books.Id)
+            @Html.DisplayFor(model => model.Books.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.BorrowerLibrary)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BorrowerLibrary.Id)
+            @Html.DisplayFor(model => model.BorrowerLibrary.Address)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Reader)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Reader.Id)
+            @Html.DisplayFor(model => model.Reader.LastName)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reader.FirstName)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Редагувати</a> |
+    <a asp-action="Index">Назад</a>
 </div>

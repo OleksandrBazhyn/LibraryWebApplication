@@ -1,8 +1,20 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Домашня сторінка";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Ласкаво просимо!</h1>
+    <p>Роботу виконав <a href="https://linktr.ee/oleksandrbazhyn" target="_blank"><b>Бажин Олександр Вадимович</b></a>, студент групи К-24 ОП "Інформатика"<br />факультету Комп'ютерних наук та кібернетики Київського національного університету імені Тараса Шевченка.</p>
+</div>
+<div>
+    <h3>Доступні таблиці</h3>
+    <ul>
+        <ol>@Html.ActionLink("Автори", "Index", "Authors")</ol>
+        <ol>@Html.ActionLink("Жанри", "Index", "Genres")</ol>
+        <ol>@Html.ActionLink("Мови", "Index", "Languages")</ol>
+        <ol>@Html.ActionLink("Книги", "Index", "Books")</ol>
+        <ol>@Html.ActionLink("Бібліотеки", "Index", "Libraries")</ol>
+        <ol>@Html.ActionLink("Читачі", "Index", "Readers")</ol>
+        <ol>@Html.ActionLink("Позики", "Index", "BooksIssues")</ol>
+    </ul>
 </div>
