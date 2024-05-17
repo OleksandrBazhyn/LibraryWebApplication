@@ -147,9 +147,11 @@ namespace LibraryWebApplication.Controllers
             var reader = await _context.Readers.FindAsync(id);
             if (reader != null)
             {
+                var dependedbooksissues = await _context.BooksIssues.Where(c => c.ReaderId == reader.Id).ToListAsync();
+                _context.BooksIssues.RemoveRange(dependedbooksissues);
                 _context.Readers.Remove(reader);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
