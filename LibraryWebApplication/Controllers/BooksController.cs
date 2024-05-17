@@ -269,6 +269,8 @@ namespace LibraryWebApplication.Controllers
             var book = await _context.Books.FindAsync(id);
             if (book != null)
             {
+                var dependedbooksissues = await _context.BooksIssues.Where(c => c.BooksId == book.Id).ToListAsync();
+                _context.BooksIssues.RemoveRange(dependedbooksissues);
                 _context.Books.Remove(book);
             }
             

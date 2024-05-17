@@ -148,9 +148,20 @@ namespace LibraryWebApplication.Controllers
             var language = await _context.Languages.FindAsync(id);
             if (language != null)
             {
+                var dependedbooks = await _context.Books.Where(c => c.Language == id.ToString()).ToListAsync();
+                if (dependedbooks.Any())
+                {
+                    foreach (var book in dependedbooks)
+                    {
+                        var dependedbooksissues = await _context.BooksIssues.Where(c => c.BooksId == book.Id).ToListAsync();
+                        _context.BooksIssues.RemoveRange(dependedbooksissues);
+
+                        _context.Books.Remove(book);
+                    }
+                }
                 _context.Languages.Remove(language);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
