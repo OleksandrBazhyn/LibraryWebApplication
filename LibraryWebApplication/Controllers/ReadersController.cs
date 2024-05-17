@@ -21,9 +21,9 @@ namespace LibraryWebApplication.Controllers
         // GET: Readers
         public async Task<IActionResult> Index()
         {
-              return _context.Readers != null ? 
-                          View(await _context.Readers.ToListAsync()) :
-                          Problem("Entity set 'DbAndInformationSystemsContext.Readers'  is null.");
+            return _context.Readers != null ?
+                        View(await _context.Readers.ToListAsync()) :
+                        Problem("Entity set 'DbAndInformationSystemsContext.Readers'  is null.");
         }
 
         // GET: Readers/Details/5
@@ -57,6 +57,10 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,PhoneNumber,Email,Address,FirstName,LastName")] Reader reader)
         {
+            if (reader.Email.Length < 50 || reader.FirstName.Length < 50 || reader.LastName.Length < 50)
+            {
+                return Problem("Введено невірні значення");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(reader);
@@ -93,7 +97,10 @@ namespace LibraryWebApplication.Controllers
             {
                 return NotFound();
             }
-
+            if (reader.Email.Length < 50 || reader.FirstName.Length < 50 || reader.LastName.Length < 50)
+            {
+                return Problem("Введено невірні значення");
+            }
             if (ModelState.IsValid)
             {
                 try

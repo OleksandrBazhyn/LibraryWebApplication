@@ -58,6 +58,10 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Language1")] Language language)
         {
+            if (language.Language1.Length < 50)
+            {
+                return Problem("Введено невірні значення");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(language);
@@ -94,7 +98,10 @@ namespace LibraryWebApplication.Controllers
             {
                 return NotFound();
             }
-
+            if (language.Language1.Length < 50)
+            {
+                return Problem("Введено невірні значення");
+            }
             if (ModelState.IsValid)
             {
                 try
