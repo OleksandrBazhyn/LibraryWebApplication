@@ -55,7 +55,7 @@ namespace LibraryWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Genre1")] Genre genre)
+        public async Task<IActionResult> Create([Bind("Id,Genre_")] Genre genre)
         {
             if (ModelState.IsValid)
             {
@@ -143,7 +143,7 @@ namespace LibraryWebApplication.Controllers
             if (_context.Genres == null)
             {
                 return Problem("Entity set 'DbAndInformationSystemsContext.Genres'  is null.");
-            }
+            }       
             var genre = await _context.Genres.FindAsync(id);
             if (genre != null)
             {
