@@ -57,6 +57,10 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Genre_")] Genre genre)
         {
+            if (genre.Genre_.Length < 50)
+            {
+                return Problem("Введено невірні значення");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(genre);
@@ -93,7 +97,10 @@ namespace LibraryWebApplication.Controllers
             {
                 return NotFound();
             }
-
+            if (genre.Genre_.Length < 50)
+            {
+                return Problem("Введено невірні значення");
+            }
             if (ModelState.IsValid)
             {
                 try

@@ -21,9 +21,9 @@ namespace LibraryWebApplication.Controllers
         // GET: Authors
         public async Task<IActionResult> Index()
         {
-              return _context.Authors != null ? 
-                          View(await _context.Authors.ToListAsync()) :
-                          Problem("Entity set 'DbAndInformationSystemsContext.Authors'  is null.");
+            return _context.Authors != null ?
+                        View(await _context.Authors.ToListAsync()) :
+                        Problem("Entity set 'DbAndInformationSystemsContext.Authors'  is null.");
         }
 
         // GET: Authors/Details/5
@@ -58,6 +58,10 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Birth,Citizenship")] Author author)
         {
+            if (author.LastName.Length < 50 || author.FirstName.Length < 50 || author.Citizenship.Length < 50)
+            {
+                return Problem("Введено невірні значення");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(author);
@@ -93,6 +97,11 @@ namespace LibraryWebApplication.Controllers
             if (id != author.Id)
             {
                 return NotFound();
+            }
+
+            if (author.LastName.Length < 50 || author.FirstName.Length < 50 || author.Citizenship.Length < 50)
+            {
+                return Problem("Введено невірні значення");
             }
 
             if (ModelState.IsValid)
