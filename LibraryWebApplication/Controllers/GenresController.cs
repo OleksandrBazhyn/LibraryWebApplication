@@ -147,6 +147,17 @@ namespace LibraryWebApplication.Controllers
             var genre = await _context.Genres.FindAsync(id);
             if (genre != null)
             {
+                var dependedbooks = await _context.Books.Where(c => c.Genre == id.ToString()).ToListAsync();
+                if (dependedbooks.Any())
+                {
+                    foreach (var book in dependedbooks)
+                    {
+                        var dependedbooksissues = await _context.BooksIssues.Where(c => c.BooksId == book.Id).ToListAsync();
+                        _context.BooksIssues.RemoveRange(dependedbooksissues);
+
+                        _context.Books.Remove(book);
+                    }
+                }
                 _context.Genres.Remove(genre);
             }
             
