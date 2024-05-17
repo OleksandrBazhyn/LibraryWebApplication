@@ -57,17 +57,17 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Genre_")] Genre genre)
         {
-            if (genre.Genre_.Length < 50)
+            if (genre.Genre_.Length >= 50)
             {
-                return Problem("Введено невірні значення");
+                if (ModelState.IsValid)
+                {
+                    _context.Add(genre);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(genre);
             }
-            if (ModelState.IsValid)
-            {
-                _context.Add(genre);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(genre);
+            return Problem("Введено невірні значення");
         }
 
         // GET: Genres/Edit/5
@@ -97,31 +97,31 @@ namespace LibraryWebApplication.Controllers
             {
                 return NotFound();
             }
-            if (genre.Genre_.Length < 50)
+            if (genre.Genre_.Length >= 50)
             {
-                return Problem("Введено невірні значення");
-            }
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(genre);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GenreExists(genre.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(genre);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!GenreExists(genre.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(genre);
             }
-            return View(genre);
+            return Problem("Введено невірні значення");
         }
 
         // GET: Genres/Delete/5
