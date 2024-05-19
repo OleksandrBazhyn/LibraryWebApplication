@@ -39,7 +39,7 @@ namespace LibraryWebApplication.Controllers
             ViewBag.GenreId = id;
             ViewBag.GenreName = name;
             // var bookByGenre = _context.Books.Where(b => b.Id == id.ToString()).Include(b => b.Genre);
-            var bookByGenre = _context.Books.Where(b => b.Genre == id.ToString());
+            var bookByGenre = _context.Books.Include(b => b.AuthorNavigation).Include(b => b.GenreNavigation).Include(b => b.LanguageNavigation).Where(b => b.Genre == id.ToString());
             
             return View(await bookByGenre.ToListAsync());
         }
@@ -51,7 +51,7 @@ namespace LibraryWebApplication.Controllers
             ViewBag.AuthorId = id;
             ViewBag.AuthorLastName = lastname;
             ViewBag.AuthorFirstName = firstname;
-            var bookByAuthor = _context.Books.Where(b => b.Author == id.ToString());
+            var bookByAuthor = _context.Books.Include(b => b.AuthorNavigation).Include(b => b.GenreNavigation).Include(b => b.LanguageNavigation).Where(b => b.Author == id.ToString());
 
             return View(await bookByAuthor.ToListAsync());
         }
@@ -62,7 +62,7 @@ namespace LibraryWebApplication.Controllers
             // Found the books by language
             ViewBag.LanguageId = id;
             ViewBag.LanguageName = name;
-            var bookByLanguage = _context.Books.Where(b => b.Language == id.ToString());
+            var bookByLanguage = _context.Books.Include(b => b.AuthorNavigation).Include(b => b.GenreNavigation).Include(b => b.LanguageNavigation).Where(b => b.Language == id.ToString());
 
             return View(await bookByLanguage.ToListAsync());
         }

@@ -25,50 +25,52 @@
                 @Html.DisplayNameFor(model => model.PublicationYear)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AuthorNavigation)
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GenreNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LanguageNavigation)
+                @Html.DisplayNameFor(model => model.Language)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Isbn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublicationYear)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AuthorNavigation.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AuthorNavigation.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GenreNavigation.Genre_)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LanguageNavigation.Language1)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Позики цієї книги</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Isbn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublicationYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorNavigation.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorNavigation.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GenreNavigation.Genre_)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LanguageNavigation.Language1)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Позики цієї книги</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
