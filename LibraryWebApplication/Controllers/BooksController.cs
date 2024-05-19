@@ -23,9 +23,12 @@ namespace LibraryWebApplication.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return _context.Books != null ?
+            var dbAndInformationSystemsContext = _context.Books.Include(b => b.AuthorNavigation).Include(b => b.GenreNavigation).Include(b => b.LanguageNavigation);
+            return View(await dbAndInformationSystemsContext.ToListAsync());
+            /*
+             * return _context.Books != null ?
                         View(await _context.Books.ToListAsync()) :
-                        Problem("Entity set 'DbAndInformationSystemsContext.Books'  is null.");
+                        Problem("Entity set 'DbAndInformationSystemsContext.Books'  is null."); */
         }
 
         public async Task<IActionResult> GenreIndex(int? id, string? name)
