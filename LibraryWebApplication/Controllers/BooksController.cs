@@ -121,10 +121,6 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Isbn,Name,Genre,PublicationYear,Language")] Book book)
         {
-            if (book.Isbn.Length < 50 || book.Name.Length < 50)
-            {
-                return Problem("Введено невірні значення");
-            }
             if (ModelState.IsValid)
             {
                 _context.Add(book);
@@ -139,11 +135,7 @@ namespace LibraryWebApplication.Controllers
         public async Task<IActionResult> GenreCreate(int genreId, [Bind("Id,Isbn,Name,Author,PublicationYear,Language")] Book book)
         {
             book.Genre = genreId.ToString();
-            if (book.Isbn.Length < 50 || book.Name.Length < 50)
-            {
-                return Problem("Введено невірні значення");
-            }
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 _context.Add(book);
                 await _context.SaveChangesAsync();
@@ -160,10 +152,6 @@ namespace LibraryWebApplication.Controllers
         public async Task<IActionResult> AuthorCreate(int authorId, [Bind("Id,Isbn,Name,Genre,PublicationYear,Language")] Book book)
         {
             book.Author = authorId.ToString();
-            if (book.Isbn.Length < 50 || book.Name.Length < 50)
-            {
-                return Problem("Введено невірні значення");
-            }
             if (ModelState.IsValid)
             {
                 _context.Add(book);
@@ -180,10 +168,6 @@ namespace LibraryWebApplication.Controllers
         public async Task<IActionResult> LanguageCreate(int languageId, [Bind("Id,Isbn,Name,Genre,PublicationYear,Author")] Book book)
         {
             book.Language = languageId.ToString();
-            if (book.Isbn.Length < 50 || book.Name.Length < 50)
-            {
-                return Problem("Введено невірні значення");
-            }
             if (ModelState.IsValid)
             {
                 _context.Add(book);
@@ -225,10 +209,7 @@ namespace LibraryWebApplication.Controllers
             {
                 return NotFound();
             }
-            if (book.Isbn.Length < 50 || book.Name.Length < 50)
-            {
-                return Problem("Введено невірні значення");
-            }
+
             if (ModelState.IsValid)
             {
                 try
