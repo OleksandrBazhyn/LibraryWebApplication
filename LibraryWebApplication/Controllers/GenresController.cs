@@ -57,17 +57,17 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Genre_")] Genre genre)
         {
-            if (genre.Genre_.Length >= 50)
+            if (genre.Genre_.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(genre);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(genre);
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                _context.Add(genre);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(genre);
         }
 
         // GET: Genres/Edit/5
@@ -97,31 +97,31 @@ namespace LibraryWebApplication.Controllers
             {
                 return NotFound();
             }
-            if (genre.Genre_.Length >= 50)
+            if (genre.Genre_.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        _context.Update(genre);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!GenreExists(genre.Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(genre);
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(genre);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!GenreExists(genre.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(genre);
         }
 
         // GET: Genres/Delete/5

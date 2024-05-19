@@ -58,17 +58,17 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Language1")] Language language)
         {
-            if (language.Language1.Length >= 50)
+            if (language.Language1.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(language);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(language);
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                _context.Add(language);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(language);
         }
 
         // GET: Languages/Edit/5
@@ -98,31 +98,31 @@ namespace LibraryWebApplication.Controllers
             {
                 return NotFound();
             }
-            if (language.Language1.Length >= 50)
+            if (language.Language1.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        _context.Update(language);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!LanguageExists(language.Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(language);
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(language);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!LanguageExists(language.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(language);
         }
 
         // GET: Languages/Delete/5

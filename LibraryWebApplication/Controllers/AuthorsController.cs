@@ -58,17 +58,17 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Birth,Citizenship")] Author author)
         {
-            if (author.LastName.Length >= 50 && author.FirstName.Length >= 50 && author.Citizenship.Length >= 50)
+            if (author.LastName.Length < 50 || author.FirstName.Length < 50 || author.Citizenship.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(author);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(author);
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                _context.Add(author);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(author);
         }
 
         // GET: Authors/Edit/5
@@ -99,32 +99,32 @@ namespace LibraryWebApplication.Controllers
                 return NotFound();
             }
 
-            if (author.LastName.Length >= 50 && author.FirstName.Length >= 50 && author.Citizenship.Length >= 50)
+            if (author.LastName.Length < 50 || author.FirstName.Length < 50 || author.Citizenship.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        _context.Update(author);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!AuthorExists(author.Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(author);
+                return Problem("Введено невірні значення");
             }
 
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(author);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AuthorExists(author.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(author);
         }
 
         // GET: Authors/Delete/5

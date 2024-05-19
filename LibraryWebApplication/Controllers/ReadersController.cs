@@ -57,17 +57,17 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,PhoneNumber,Email,Address,FirstName,LastName")] Reader reader)
         {
-            if (reader.Email.Length >= 50 && reader.FirstName.Length >= 50 && reader.LastName.Length >= 50)
+            if (reader.Email.Length < 50 || reader.FirstName.Length < 50 || reader.LastName.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(reader);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(reader);
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                _context.Add(reader);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(reader);
         }
 
         // GET: Readers/Edit/5
@@ -97,31 +97,31 @@ namespace LibraryWebApplication.Controllers
             {
                 return NotFound();
             }
-            if (reader.Email.Length >= 50 && reader.FirstName.Length >= 50 && reader.LastName.Length >= 50)
+            if (reader.Email.Length < 50 || reader.FirstName.Length < 50 || reader.LastName.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        _context.Update(reader);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!ReaderExists(reader.Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(reader);
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(reader);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ReaderExists(reader.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(reader);
         }
 
         // GET: Readers/Delete/5

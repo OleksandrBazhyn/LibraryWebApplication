@@ -121,17 +121,17 @@ namespace LibraryWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Isbn,Name,Genre,PublicationYear,Language")] Book book)
         {
-            if (book.Isbn.Length >= 50 && book.Name.Length >= 50)
+            if (book.Isbn.Length < 50 || book.Name.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(book);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(book);
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                _context.Add(book);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(book);
         }
 
         [HttpPost]
@@ -139,20 +139,20 @@ namespace LibraryWebApplication.Controllers
         public async Task<IActionResult> GenreCreate(int genreId, [Bind("Id,Isbn,Name,Author,PublicationYear,Language")] Book book)
         {
             book.Genre = genreId.ToString();
-            if (book.Isbn.Length >= 50 && book.Name.Length >= 50)
+            if (book.Isbn.Length < 50 || book.Name.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(book);
-                    await _context.SaveChangesAsync();
-                    // return RedirectToAction(nameof(Index));
-                    return RedirectToAction("GenreIndex", "Books", new { id = genreId, name = _context.Genres.Where(c => c.Id == genreId.ToString()).FirstOrDefault().Genre_ });
-                }
-                // ViewBag["genreId"] = new SelectList(_context.Genres, "Id", "Name", );
-                // return View(book);
-                return RedirectToAction("GenreIndex", "Books", new { id = genreId, name = _context.Genres.Where(c => c.Id == genreId.ToString()).FirstOrDefault().Genre_ });
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                _context.Add(book);
+                await _context.SaveChangesAsync();
+                // return RedirectToAction(nameof(Index));
+                return RedirectToAction("GenreIndex", "Books", new {id = genreId, name = _context.Genres.Where(c => c.Id == genreId.ToString()).FirstOrDefault().Genre_});
+            }
+            // ViewBag["genreId"] = new SelectList(_context.Genres, "Id", "Name", );
+            // return View(book);
+            return RedirectToAction("GenreIndex", "Books", new {id = genreId, name = _context.Genres.Where(c => c.Id == genreId.ToString()).FirstOrDefault().Genre_});
         }
 
         [HttpPost]
@@ -160,19 +160,19 @@ namespace LibraryWebApplication.Controllers
         public async Task<IActionResult> AuthorCreate(int authorId, [Bind("Id,Isbn,Name,Genre,PublicationYear,Language")] Book book)
         {
             book.Author = authorId.ToString();
-            if (book.Isbn.Length >= 50 && book.Name.Length >= 50)
+            if (book.Isbn.Length < 50 || book.Name.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(book);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction("AuthorIndex", "Books", new { id = authorId, lastname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().LastName, firstname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().FirstName });
-                }
+                return Problem("Введено невірні значення");
+            }
+            if (ModelState.IsValid)
+            {
+                _context.Add(book);
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction("AuthorIndex", "Books", new { id = authorId, lastname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().LastName, firstname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().FirstName });
             }
-            return Problem("Введено невірні значення");
+
+            return RedirectToAction("AuthorIndex", "Books", new { id = authorId, lastname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().LastName, firstname = _context.Authors.Where(c => c.Id == authorId.ToString()).FirstOrDefault().FirstName });
         }
 
         [HttpPost]
@@ -180,19 +180,19 @@ namespace LibraryWebApplication.Controllers
         public async Task<IActionResult> LanguageCreate(int languageId, [Bind("Id,Isbn,Name,Genre,PublicationYear,Author")] Book book)
         {
             book.Language = languageId.ToString();
-            if (book.Isbn.Length >= 50 && book.Name.Length >= 50)
+            if (book.Isbn.Length < 50 || book.Name.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(book);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction("LanguageIndex", "Books", new { id = languageId, name = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault().Language1 });
-                }
+                return Problem("Введено невірні значення");
+            }
+            if (ModelState.IsValid)
+            {
+                _context.Add(book);
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction("LanguageIndex", "Books", new { id = languageId, name = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault().Language1 });
             }
-            return Problem("Введено невірні значення");
+
+            return RedirectToAction("LanguageIndex", "Books", new { id = languageId, name = _context.Languages.Where(c => c.Id == languageId.ToString()).FirstOrDefault().Language1 });
         }
 
         // GET: Books/Edit/5
@@ -225,34 +225,34 @@ namespace LibraryWebApplication.Controllers
             {
                 return NotFound();
             }
-            if (book.Isbn.Length >= 50 && book.Name.Length >= 50)
+            if (book.Isbn.Length < 50 || book.Name.Length < 50)
             {
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        _context.Update(book);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!BookExists(book.Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
-                ViewData["Author"] = new SelectList(_context.Authors, "Id", "Id", book.Author);
-                ViewData["Genre"] = new SelectList(_context.Genres, "Id", "Id", book.Genre);
-                ViewData["Language"] = new SelectList(_context.Languages, "Id", "Id", book.Language);
-                return View(book);
+                return Problem("Введено невірні значення");
             }
-            return Problem("Введено невірні значення");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(book);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BookExists(book.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["Author"] = new SelectList(_context.Authors, "Id", "Id", book.Author);
+            ViewData["Genre"] = new SelectList(_context.Genres, "Id", "Id", book.Genre);
+            ViewData["Language"] = new SelectList(_context.Languages, "Id", "Id", book.Language);
+            return View(book);
         }
 
         // GET: Books/Delete/5
