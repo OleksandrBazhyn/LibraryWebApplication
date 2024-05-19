@@ -28,7 +28,7 @@ namespace LibraryWebApplication.Controllers
 
         public async Task<IActionResult> BookIndex(int? bookId, string? bookName)
         {
-            if (bookId == null) return RedirectToAction("Index", "Books");
+            if (bookId == null) return RedirectToAction("Create", "Books");
             // Found the books issues by the book
             ViewBag.BookId = bookId;
             ViewBag.BookName = bookName;
@@ -38,7 +38,7 @@ namespace LibraryWebApplication.Controllers
         }
         public async Task<IActionResult> LibraryIndex(int? libraryId, string? libraryAddress)
         {
-            if (libraryId == null) return RedirectToAction("Index", "Libraries");
+            if (libraryId == null) return RedirectToAction("Create", "Libraries");
             // Found the books issues by the library
             ViewBag.LibraryId = libraryId;
             ViewBag.LibraryAddress = libraryAddress;
@@ -49,7 +49,7 @@ namespace LibraryWebApplication.Controllers
 
         public async Task<IActionResult> ReaderIndex(int? readerId, string? lastname, string? firstname)
         {
-            if (readerId == null) return RedirectToAction("Index", "Readers");
+            if (readerId == null) return RedirectToAction("Create", "Readers");
             // Found the books issues by the reader
             ViewBag.ReaderId = readerId;
             ViewBag.ReaderLastName = lastname;

@@ -31,7 +31,7 @@ namespace LibraryWebApplication.Controllers
         public async Task<IActionResult> GenreIndex(int? id, string? name)
         {
             // if (id == null) return RedirectToAction("Genres", "Index"); в документації від викладачів було так. Я виправив згідно документації методу RedirectToAction
-            if (id == null) return RedirectToAction("Index", "Genres");
+            if (id == null) return RedirectToAction("Create", "Genres");
             // Found the books by genre
             ViewBag.GenreId = id;
             ViewBag.GenreName = name;
@@ -43,7 +43,7 @@ namespace LibraryWebApplication.Controllers
 
         public async Task<IActionResult> AuthorIndex(int? id, string? lastname, string? firstname)
         {
-            if (id == null) return RedirectToAction("Index", "Authors");
+            if (id == null) return RedirectToAction("Create", "Authors");
             // Found the books by author
             ViewBag.AuthorId = id;
             ViewBag.AuthorLastName = lastname;
@@ -55,7 +55,7 @@ namespace LibraryWebApplication.Controllers
 
         public async Task<IActionResult> LanguageIndex(int? id, string? name)
         {
-            if (id == null) return RedirectToAction("Index", "Languages");
+            if (id == null) return RedirectToAction("Create", "Languages");
             // Found the books by language
             ViewBag.LanguageId = id;
             ViewBag.LanguageName = name;
